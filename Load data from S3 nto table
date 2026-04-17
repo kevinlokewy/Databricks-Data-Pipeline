@@ -1,0 +1,11 @@
+CREATE TABLE workspace.default.company_stocks
+USING DELTA
+LOCATION 's3://kl-company-stocks-01/bronze/'
+AS
+SELECT
+*,
+current_timestamp() as _ingested_at,
+input_file_name() as _source_file,
+uuid() as _bronze_id
+FROM csv.`s3://kl-company-stocks-01/`
+WITH(header = TRUE, inferSchema = TRUE);
